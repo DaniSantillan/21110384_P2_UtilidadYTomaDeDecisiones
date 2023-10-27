@@ -1,0 +1,14 @@
+# Definir la función de utilidad
+def funcion_utilidad(cantidad_bien_1, cantidad_bien_2):
+    # Supongamos una función de utilidad cuadrática
+    return cantidad_bien_1**2 + cantidad_bien_2**2
+
+# Solicitar las cantidades de bienes al usuario
+cantidad_bien_1 = float(input("Ingrese la cantidad del bien 1: "))
+cantidad_bien_2 = float(input("Ingrese la cantidad del bien 2: "))
+
+# Calcular la utilidad usando la función definida
+utilidad = funcion_utilidad(cantidad_bien_1, cantidad_bien_2)
+
+# Mostrar el resultado
+print("La utilidad total es:", utilidad)
