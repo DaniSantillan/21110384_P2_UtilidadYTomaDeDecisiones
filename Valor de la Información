@@ -1,0 +1,14 @@
+import random
+
+def tomar_decision_paraguas():
+    # Simulamos la información meteorológica (0 para soleado, 1 para lluvioso)
+    estado_tiempo = random.randint(0, 1)
+
+    # Tomamos la decisión basada en la información
+    if estado_tiempo == 0:
+        print("El cielo está despejado. No necesitas llevar un paraguas.")
+    else:
+        print("Hay posibilidad de lluvia. Sería bueno llevar un paraguas.")
+
+# Llamamos a la función para tomar la decisión
+tomar_decision_paraguas()
