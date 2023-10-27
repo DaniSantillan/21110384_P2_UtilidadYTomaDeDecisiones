@@ -1,0 +1,65 @@
+import numpy as np
+
+# Definir el laberinto
+laberinto = np.array([
+    [0, 0, 0, 0],
+    [0, -1, 0, -1],
+    [0, 0, 0, -1],
+    [-1, 0, 0, 0]
+])
+
+# -1 representa obstáculos, 0 son espacios libres, y los valores positivos son las recompensas en esas posiciones
+
+# Inicializar la política
+politica = np.array([
+    ['D', 'R', 'D', 'L'],
+    ['U', '', 'U', ''],
+    ['U', 'R', 'U', ''],
+    ['', 'L', 'D', '']
+])
+
+# Función de utilidad
+def calcular_utilidad(estado, politica, laberinto):
+    i, j = estado
+    if politica[i, j] == 'U':
+        return laberinto[i-1, j]
+    elif politica[i, j] == 'D':
+        return laberinto[i+1, j]
+    elif politica[i, j] == 'L':
+        return laberinto[i, j-1]
+    elif politica[i, j] == 'R':
+        return laberinto[i, j+1]
+    else:
+        return 0  # Si no hay dirección, la utilidad es cero
+
+# Iteración de políticas
+def iteracion_politicas(politica, laberinto, gamma=0.9, theta=0.01):
+    while True:
+        delta = 0
+        for i in range(len(laberinto)):
+            for j in range(len(laberinto[0])):
+                if laberinto[i, j] != -1:  # Evitar obstáculos
+                    # Guardar el valor actual de la política
+                    antigua_utilidad = calcular_utilidad((i, j), politica, laberinto)
+                    
+                    # Calcular la nueva utilidad según la política actual
+                    nueva_utilidad = laberinto[i, j] + gamma * calcular_utilidad((i, j), politica, laberinto)
+                    
+                    # Actualizar la política si la utilidad cambia
+                    if abs(nueva_utilidad - antigua_utilidad) > delta:
+                        delta = abs(nueva_utilidad - antigua_utilidad)
+                        if nueva_utilidad > antigua_utilidad:
+                            politica[i, j] = 'U'
+                        else:
+                            politica[i, j] = 'D'
+
+        # Si el cambio en la utilidad es menor que theta, terminar la iteración
+        if delta < theta:
+            break
+
+# Ejecutar la iteración de políticas
+iteracion_politicas(politica, laberinto)
+
+# Imprimir la política resultante
+print("Política después de la iteración:")
+print(politica)
