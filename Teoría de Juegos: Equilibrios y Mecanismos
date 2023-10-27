@@ -1,0 +1,32 @@
+import numpy as np
+from scipy.optimize import minimize
+
+# Payoffs
+payoff_matrix_player1 = np.array([[3, 0], [5, 1]])
+payoff_matrix_player2 = np.array([[3, 5], [0, 1]])
+
+# Función de utilidad del jugador 1
+def utility_player1(strategy):
+    return -np.dot(strategy, np.dot(payoff_matrix_player1, strategy))
+
+# Función de utilidad del jugador 2
+def utility_player2(strategy):
+    return -np.dot(strategy, np.dot(payoff_matrix_player2, strategy))
+
+# Restricción para asegurar que las estrategias sumen 1
+constraint = ({'type': 'eq', 'fun': lambda x: np.sum(x) - 1})
+
+# Valor inicial (estrategia inicial)
+initial_strategy = [0.5, 0.5]
+
+# Optimización para encontrar el equilibrio de Nash
+result_player1 = minimize(utility_player1, initial_strategy, constraints=constraint)
+result_player2 = minimize(utility_player2, initial_strategy, constraints=constraint)
+
+# Estrategias en el equilibrio de Nash
+equilibrium_strategy_player1 = result_player1.x
+equilibrium_strategy_player2 = result_player2.x
+
+# Imprimir resultados
+print(f"Equilibrio de Nash para el jugador 1: {equilibrium_strategy_player1}")
+print(f"Equilibrio de Nash para el jugador 2: {equilibrium_strategy_player2}")
