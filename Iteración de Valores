@@ -1,0 +1,15 @@
+# Definir una lista de números
+numeros = [14, 7, 25, 3, 18, 12]
+
+# Inicializar una variable para almacenar el máximo, asumiendo que el primer número es el máximo inicialmente
+maximo = numeros[0]
+
+# Iterar a través de la lista de números
+for numero in numeros:
+    # Comparar el número actual con el máximo actual
+    if numero > maximo:
+        # Si el número actual es mayor, actualizar el máximo
+        maximo = numero
+
+# Imprimir el resultado
+print("El número máximo en la lista es:", maximo)
