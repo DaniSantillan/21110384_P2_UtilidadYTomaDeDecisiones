@@ -1,0 +1,33 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+
+# Crear un grafo dirigido (red de decisión)
+G = nx.DiGraph()
+
+# Añadir nodos y arcos con sus respectivas utilidades
+G.add_nodes_from(['A', 'B', 'C', 'D'])
+G.add_edges_from([('A', 'B', {'utility': 10}),
+                  ('A', 'C', {'utility': 5}),
+                  ('B', 'D', {'utility': 8}),
+                  ('C', 'D', {'utility': 12})])
+
+# Visualizar la red de decisión
+pos = nx.spring_layout(G)
+nx.draw(G, pos, with_labels=True, node_size=700, node_color="skyblue", font_size=10, font_color="black", font_weight="bold", arrowsize=20)
+edge_labels = nx.get_edge_attributes(G, 'utility')
+nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+
+plt.show()
+
+# Función para tomar decisiones basadas en utilidades
+def tomar_decision(utilidades):
+    mejor_decision = max(utilidades, key=utilidades.get)
+    return mejor_decision
+
+# Ejemplo de utilidades para cada decisión
+utilidades_decisiones = {'B': 10, 'C': 5}
+
+# Tomar la decisión basada en utilidades
+decision = tomar_decision(utilidades_decisiones)
+
+print(f"La mejor decisión es: {decision}")
