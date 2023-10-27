@@ -1,0 +1,24 @@
+from pgmpy.models import DynamicBayesianNetwork as DBN
+from pgmpy.estimators import ParameterEstimator
+from pgmpy.inference import DBNInference
+from pgmpy.sampling import BayesianModelSampling
+
+# Definir la estructura de la red
+model = DBN()
+
+model.add_edges_from([(('RainToday', 0), ('RainTomorrow', 0)),
+                      (('RainToday', 0), ('RainToday', 1)),
+                      (('RainTomorrow', 0), ('RainTomorrow', 1)),
+                      (('RainToday', 1), ('RainTomorrow', 1))])
+
+# Definir las CPDs
+cpd_rain_today = ParameterEstimator(model, data={'RainToday': [1, 0]}).estimate_cpd('RainToday')
+cpd_rain_tomorrow = ParameterEstimator(model, data={'RainToday': [1, 1], 'RainTomorrow': [1, 0]}).estimate_cpd('RainTomorrow')
+
+# Asignar las CPDs a la red
+model.add_cpds(cpd_rain_today, cpd_rain_tomorrow)
+
+# Realizar inferencia
+inference = DBNInference(model)
+result = inference.query(variables=['RainTomorrow'], evidence={'RainToday': 1}, time_slice=1)
+print(result)
