@@ -1,0 +1,36 @@
+import numpy as np
+
+# Parámetros del MDP
+estados = 3  # Estados: {Baja carga, Carga media, Carga alta}
+acciones = 2  # Acciones: {No recargar, Recargar}
+
+# Probabilidades de transición (matriz de transición)
+P = np.array([
+    [[0.8, 0.2, 0.0], [0.6, 0.3, 0.1]],  # No recargar
+    [[0.2, 0.7, 0.1], [0.0, 0.5, 0.5]]   # Recargar
+])
+
+# Recompensas instantáneas
+R = np.array([
+    [[1, 0, -1], [2, 1, 0]],  # No recargar
+    [[-1, 0, 1], [0, -2, -3]]  # Recargar
+])
+
+# Factor de descuento
+gamma = 0.9
+
+# Valor inicial arbitrario
+V = np.zeros(estados)
+
+# Algoritmo de programación dinámica
+num_iteraciones = 100
+for i in range(num_iteraciones):
+    Q = np.zeros((estados, acciones))
+    for a in range(acciones):
+        Q[:, a] = R[a] + gamma * np.dot(P[a], V)
+    V = np.max(Q, axis=1)
+
+# Política óptima
+politica_optima = np.argmax(Q, axis=1)
+
+print("Política óptima:", politica_optima)
