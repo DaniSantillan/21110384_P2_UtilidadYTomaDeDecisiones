@@ -1,0 +1,48 @@
+from pomdp_py.framework import POMDP, Space
+from pomdp_py.framework import Model, Policy
+from pomdp_py.framework import ParticleFilter
+from pomdp_py.framework import Belief
+
+
+class LaberintoPOMDP(POMDP):
+    def __init__(self):
+        super().__init__()
+
+        # Define el espacio de estados
+        self.state_space = Space(["posicion", "contenido"])
+
+        # Define el espacio de observaciones
+        self.observation_space = Space(["observacion"])
+
+        # Define el espacio de acciones
+        self.action_space = Space(["mover_izquierda", "mover_derecha", "mover_arriba", "mover_abajo"])
+
+    def T(self, s, a, sp):
+        # Función de transición: Modelo de cómo el estado evoluciona con la acción
+        # Simplificamos asumiendo una transición determinista
+        if a == "mover_izquierda" and s["posicion"] > 0:
+            return 1.0 if sp["posicion"] == s["posicion"] - 1 else 0.0
+        elif a == "mover_derecha" and s["posicion"] < 4:
+            return 1.0 if sp["posicion"] == s["posicion"] + 1 else 0.0
+        elif a == "mover_arriba" and s["contenido"] == "escalera":
+            return 1.0 if sp["posicion"] == s["posicion"] - 1 else 0.0
+        elif a == "mover_abajo" and s["contenido"] == "escalera":
+            return 1.0 if sp["posicion"] == s["posicion"] + 1 else 0.0
+        else:
+            return 0.0
+
+    def O(self, a, sp, o):
+        # Función de observación: Modelo de cómo se generan las observaciones
+        # Simplificamos asumiendo observaciones perfectas
+        return 1.0 if o == sp["posicion"] else 0.0
+
+    def R(self, s, a):
+        # Función de recompensa: Modelo de la recompensa asociada a una acción
+        # Simplificamos asumiendo una recompensa constante
+        return -1.0
+
+# Creamos una instancia de LaberintoPOMDP
+laberinto_pomdp = LaberintoPOMDP()
+
+# Ahora, podríamos definir una política (estrategia) para que el agente tome decisiones.
+# También podríamos implementar un filtro de partículas para manejar la creencia del agente sobre su posición actual.
